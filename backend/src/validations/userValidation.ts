@@ -33,6 +33,8 @@ export class userSchema {
     "any.only": "{{#label}} must be either 'manager', 'admin' ",
   });
   static isActive = Joi.boolean().default(false);
+  static isBan = Joi.boolean().default(false);
+
   static lastLogin = Joi.date().optional();
 
   static page = Joi.number().integer().min(1).max(500).default(1).messages({
@@ -60,17 +62,17 @@ export class userSchema {
     password: this.password,
     _roleId: this._roleId,
     isActive: this.isActive,
+    isBan: this.isBan,
     lastLogin: this.lastLogin,
   });
 
   static updateUserSchema = Joi.object({
-    name: this.userName.required(),
-    surName: this.surName.required(),
-    email: this.email.required(),
-    password: this.password.required(),
+    name: this.userName,
+    surName: this.surName,
+    email: this.email,
+    password: this.password,
     _roleId: this._roleId,
-    isActive: this.isActive,
-  }).or("name", "email", "password", "_roleId", "isActive");
+  }).or("name", "email", "password", "_roleId");
 
   static login = Joi.object({
     email: this.email.required(),

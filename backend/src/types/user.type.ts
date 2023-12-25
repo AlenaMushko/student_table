@@ -7,6 +7,7 @@ export interface IUser extends Document {
   password: string;
   _roleId: string;
   isActive: boolean;
+  isBan: boolean;
   lastLogin: Date;
 }
 

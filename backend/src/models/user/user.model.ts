@@ -39,6 +39,10 @@ const userSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    isBan: {
+      type: Boolean,
+      default: false,
+    },
     lastLogin: {
       type: Date,
       default: Date.now,

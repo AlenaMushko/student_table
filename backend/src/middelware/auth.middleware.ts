@@ -62,7 +62,11 @@ class AuthMiddleware {
     }
   }
 
-  public async isUserById(req: Request, res: Response, next: NextFunction) {
+  public async findByIdByThrow(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) {
     try {
       const { userId } = req.params;
       const user = await userRepository.findById({ _id: new ObjectId(userId) });

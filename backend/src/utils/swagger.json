@@ -1,1 +1,294 @@
-{}
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "API documentation for students table",
+    "version": "1.0.0",
+    "title": "Students table API"
+  },
+  "tags": [
+    {
+      "name": "roles",
+      "description": "Endpoints related to role management"
+    },
+    {
+      "name": "auth",
+      "description": "Endpoints related to authentication processes"
+    }
+  ],
+  "paths": {
+    "/roles/": {
+      "post": {
+        "tags": ["roles"],
+        "summary": "Create a new Role",
+        "description": "Create a new role. Requires ADMIN role.",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Role"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Role created successfully",
+            "schema": {
+              "$ref": "#/definitions/Role"
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "409": {
+            "description": "Role already exists"
+          }
+        },
+        "security": [
+          {
+            "api_key": [],
+            "roles": ["admin"]
+          }
+        ]
+      }
+    },
+    "/roles/all": {
+      "get": {
+        "tags": ["roles"],
+        "summary": "Get All Roles",
+        "description": "Retrieve a list of all roles.",
+        "responses": {
+          "200": {
+            "description": "List of roles",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Role"
+              }
+            }
+          },
+          "404": {
+            "description": "Roles not found"
+          }
+        }
+      }
+    },
+    "/roles/{roleId}": {
+      "get": {
+        "tags": ["roles"],
+        "summary": "Get Role By ID",
+        "description": "Retrieve a role by its ID.",
+        "parameters": [
+          {
+            "name": "roleId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Role details",
+            "schema": {
+              "$ref": "#/definitions/Role"
+            }
+          },
+          "404": {
+            "description": "Role not found"
+          }
+        }
+      }
+    },
+
+    "/auth/login": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "User Login",
+        "description": "Login with email and password.",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Login"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful login",
+            "schema": {
+              "$ref": "#/definitions/TokenPair"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "delete": {
+        "tags": ["auth"],
+        "summary": "User Logout",
+        "description": "Logs out the current user.",
+        "responses": {
+          "200": {
+            "description": "Successful logout"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/auth/activatedToken/:userId": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Activate User Account",
+        "description": "Activates user account using the provided userId.",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Activation successful"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/auth/createPassword/:activatedToken": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Create Password",
+        "description": "Creates password using a valid activated token.",
+        "parameters": [
+          {
+            "name": "activatedToken",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreatePassword"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Password created successfully"
+          },
+          "400": {
+            "description": "Invalid request"
+          }
+        }
+      }
+    },
+    "/auth/forgotPassword": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Forgot Password",
+        "description": "Initiates password reset process for the user.",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ForgotPassword"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Password reset email sent successfully"
+          },
+          "400": {
+            "description": "Invalid request"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Role": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string",
+          "enum": [
+            "manager",
+            "admin"
+          ]
+        },
+        "permissions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+  "Login": {
+    "type": "object",
+    "required": ["email", "password"],
+    "properties": {
+      "email": {
+        "type": "string"
+      },
+      "password": {
+        "type": "string"
+      }
+    }
+  },
+  "TokenPair": {
+    "type": "object",
+    "properties": {
+      "accessToken": {
+        "type": "string"
+      },
+      "refreshToken": {
+        "type": "string"
+      }
+    }
+  },
+  "CreatePassword": {
+    "type": "object",
+    "required": ["password"],
+    "properties": {
+      "password": {
+        "type": "string"
+      }
+    }
+  },
+  "ForgotPassword": {
+    "type": "object",
+    "required": ["email"],
+    "properties": {
+      "email": {
+        "type": "string"
+      }
+    }
+  }
+}
+}

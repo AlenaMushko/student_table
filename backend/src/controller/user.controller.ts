@@ -20,67 +20,67 @@ class UserController {
     }
   }
 
-  // public async findById(
-  //   req: Request,
-  //   res: Response,
-  //   next: NextFunction,
-  // ): Promise<Response<IUser>> {
-  //   try {
-  //     const user = res.locals.user;
-  //
-  //     return res.status(200).json({ data: user });
-  //   } catch (error) {
-  //     next(error);
-  //   }
-  // }
-  //
-  // public async updateById(
-  //   req: Request,
-  //   res: Response,
-  //   next: NextFunction,
-  // ): Promise<Response<IUser>> {
-  //   try {
-  //     const { userId } = req.params;
-  //     const user = res.locals.user;
-  //     const value = req.body;
-  //     const updatedUser = await userService.updateById(userId, user, value);
-  //
-  //     return res
-  //       .status(200)
-  //       .json({ message: "User is updated", data: updatedUser });
-  //   } catch (e) {
-  //     next(e);
-  //   }
-  // }
-  //
-  // public async deleteById(
-  //   req: Request,
-  //   res: Response,
-  //   next: NextFunction,
-  // ): Promise<Response<IUser>> {
-  //   try {
-  //     const { userId } = req.params;
-  //     await userService.deleteById(userId);
-  //
-  //     return res.status(200).json({ message: `User id=${userId} is deleted` });
-  //   } catch (e) {
-  //     next(e);
-  //   }
-  // }
-  //
-  // public async emailToManager(
-  //   req: Request,
-  //   res: Response,
-  //   next: NextFunction,
-  // ): Promise<Response<void>> {
-  //   try {
-  //     const user = res.locals.user;
-  //     await userService.emailToManager(user, req.body.text);
-  //     return res.status(200).json({ message: "email is sending for manager" });
-  //   } catch (e) {
-  //     next(e);
-  //   }
-  // }
+  public async getAll(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response<IUser[]>> {
+    try {
+      const users = await userService.getAll();
+
+      return res.status(200).json({ message: "User is created", data: users });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  public async findById(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response<IUser>> {
+    try {
+      const user = res.locals.user;
+
+      return res.status(200).json({ data: user });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  public async updateById(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response<IUser>> {
+    try {
+      const { userId } = req.params;
+      const user = res.locals.user;
+      const value = req.body;
+      const updatedUser = await userService.updateById(userId, user, value);
+
+      return res
+        .status(200)
+        .json({ message: "User is updated", data: updatedUser });
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  public async deleteById(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response<IUser>> {
+    try {
+      const { userId } = req.params;
+      await userService.deleteById(userId);
+
+      return res.status(200).json({ message: `User id=${userId} is deleted` });
+    } catch (e) {
+      next(e);
+    }
+  }
 }
 
 export const userController = new UserController();

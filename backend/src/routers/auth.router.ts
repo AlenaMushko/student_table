@@ -26,7 +26,7 @@ router.post(
   authenticateMiddleware.isLogin,
   authMiddleware.isMyRole(ERoles.ADMIN),
   commonMiddleware.isIdValid("userId"),
-  authMiddleware.isUserById,
+  authMiddleware.findByIdByThrow,
   authController.activatedToken,
 );
 
