@@ -11,11 +11,11 @@ import { userSchema } from "../validations";
 
 const router = Router();
 router.use(authenticateMiddleware.isLogin);
+router.use(  authMiddleware.isMyRole(ERoles.ADMIN))
 
 router.post(
   "/",
   commonMiddleware.isBodyValid(userSchema.create),
-  authMiddleware.isMyRole(ERoles.ADMIN),
   userController.create,
 );
 
